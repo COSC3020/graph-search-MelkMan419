@@ -5,22 +5,16 @@ const jsc = require('jsverify');
 eval(fs.readFileSync('code.js')+'');
 
 // Define a generator for graphs represented as adjacency lists
-function arbitraryGraph(dict) {
-    const keys = Object.keys(dict);
-    return jsc.record(keys.reduce((acc, key) => {
-        acc[key] = jsc.elements(dict[key]);
-        return acc;
-    }, {}));
+function arbitraryGraph() {
+    return jsc.dictionary(
+        jsc.asciistring,     // Node
+        jsc.array(jsc.asciistring) // Neighbors
+    );
 }
+
+// Define a property test for depthFirstSearch function
 const testDepthFirstSearch = jsc.forall(
-    arbitraryGraph({
-        'A': ['B', 'C'],
-        'B': ['D', 'E'],
-        'C': ['F'],
-        'D': [],
-        'E': ['F'],
-        'F': []
-    }),
+    arbitraryGraph(),
     jsc.asciistring, // Start node
     jsc.asciistring, // Target node
     function(graph, startNode, targetNode) {
@@ -30,4 +24,6 @@ const testDepthFirstSearch = jsc.forall(
         return JSON.stringify(result) === JSON.stringify(expectedResult);
     }
 );
+
+// Run the property-based test
 jsc.assert(testDepthFirstSearch);
