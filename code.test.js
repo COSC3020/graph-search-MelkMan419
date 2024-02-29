@@ -6,9 +6,8 @@ eval(fs.readFileSync('code.js')+'');
 
 // Define a generator for graphs represented as adjacency lists
 function arbitraryGraph() {
-    return jsc.dictionary(
-        jsc.asciistring,     // Node
-        jsc.array(jsc.asciistring) // Neighbors
+    return jsc.array(
+        jsc.tuple([jsc.asciistring, jsc.array(jsc.asciistring)])
     );
 }
 
