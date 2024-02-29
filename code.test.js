@@ -4,10 +4,27 @@ const jsc = require('jsverify');
 // Load the depthFirstSearch function from code.js
 eval(fs.readFileSync('code.js')+'');
 
+// Reference implementation of DFS
+function dfs(graph, startNode, targetNode, visited = new Set()) {
+    if (startNode === targetNode) {
+        return [startNode];
+    }
+    visited.add(startNode);
+    for (let neighbor of graph[startNode]) {
+        if (!visited.has(neighbor)) {
+            let path = dfs(graph, neighbor, targetNode, visited);
+            if (path.length > 0) {
+                return [startNode, ...path];
+            }
+        }
+    }
+    return [];
+}
+
 // Define a generator for graphs represented as adjacency lists
 function arbitraryGraph() {
-    return jsc.array(
-        jsc.tuple([jsc.asciistring, jsc.array(jsc.asciistring)])
+    return jsc.dict(
+        jsc.array(jsc.asciistring) // Neighbors
     );
 }
 
