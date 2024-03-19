@@ -1,21 +1,20 @@
 function depthFirstSearch(graph, startNode, targetNode) {
-    let visited = new Set();
-    function dfs(currentNode) {
-        if (currentNode === targetNode) {
-            return [currentNode];
-        }
-        visited.add(currentNode);
-        for (let neighbor of graph[currentNode]) {
-            if (!visited.has(neighbor)) {
-                let path = dfs(neighbor);
-                if (path.length > 0) {
-                    return [currentNode, ...path];
-                }
-            }
-        }
-        return [];
-    }
-    return dfs(startNode);
-}
+    if (startNode === targetNode) return [startNode];
+    // For this algorithm, we will assume an adjacency matrix with a value of 1
+    // representing a path exists and 2 representing that it exists and has been visited
+    var pos = null;
+    var nodeList = [];
 
+    for (var i = 0; i < graph.length; i++) {
+        pos = graph[startNode][i];
+        if (pos === 1) {
+            if (i === targetNode) return [i];
+            graph[startNode][i] = 2;
+            nodeList = nodeList.concat(i, depthFirstSearch(graph, i, targetNode));
+        }
+        if (nodeList[nodeList.length - 1] != targetNode) {nodeList = []; }
+    }
+
+    return nodeList;
+}
 module.exports = depthFirstSearch;
