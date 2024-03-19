@@ -26,6 +26,7 @@ the function and run automatically when you commit through a GitHub action.
 
 What is the worst-case big $\Theta$ complexity of your implementation? Add your
 answer, including your reasoning, to this markdown file.
+The worse case is when our target node does not exist, and the whole graph is travsered trying to find it. We will eventually add every single node onto the list so we will have checked every single vertex for |V|. Then we're gonna see if any edge leads to the targetNode, which would run for number of edges or |E| in the worst case. Now adding this together, our worst case is $\Theta\$ (|E|+|V|)
 
 ## Bonus
 
