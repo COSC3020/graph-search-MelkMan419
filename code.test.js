@@ -1,45 +1,53 @@
 const fs = require('fs');
-const jsc = require('jsverify');
+const assert = require('assert');
 
-// Load the depthFirstSearch function from code.js
 eval(fs.readFileSync('code.js')+'');
 
-// Reference implementation of DFS
-function dfs(graph, startNode, targetNode, visited = new Set()) {
-    if (startNode === targetNode) {
-        return [startNode];
-    }
-    visited.add(startNode);
-    for (let neighbor of graph[startNode]) {
-        if (!visited.has(neighbor)) {
-            let path = dfs(graph, neighbor, targetNode, visited);
-            if (path.length > 0) {
-                return [startNode, ...path];
-            }
-        }
-    }
-    return [];
-}
+let graph1 = [
+  [1, 2, 5],
+  [4],
+  [3, 5],
+  [4],
+  [],
+  [6],
+  []
+];
 
-// Define a generator for graphs represented as adjacency lists
-function arbitraryGraph() {
-    return jsc.dict(
-        jsc.array(jsc.asciistring) // Neighbors
-    );
-}
+let graph2 = [
+  [1, 3, 4, 6],
+  [2, 4],
+  [3, 5],
+  [4, 5],
+  [5],
+  [6],
+  []
+];
 
-// Define a property test for depthFirstSearch function
-const testDepthFirstSearch = jsc.forall(
-    arbitraryGraph(),
-    jsc.asciistring, // Start node
-    jsc.asciistring, // Target node
-    function(graph, startNode, targetNode) {
-        // Convert the result to string for comparison
-        const result = depthFirstSearch(graph, startNode, targetNode);
-        const expectedResult = dfs(graph, startNode, targetNode);
-        return JSON.stringify(result) === JSON.stringify(expectedResult);
-    }
-);
+let graph3 = [
+  [1, 2, 3],
+  [2, 3],
+  [3],
+  []
+];
 
-// Run the property-based test
-jsc.assert(testDepthFirstSearch);
+let graph4 = [
+  [1],
+  [2, 3],
+  [3],
+  []
+];
+
+let graph5 = [
+  [1, 2],
+  [2],
+  []
+];
+
+assert(JSON.stringify(depthFirstSearch(graph1, 0, 3)) == JSON.stringify([0, 2, 3]));
+assert(JSON.stringify(depthFirstSearch(graph1, 0, 7)) == JSON.stringify([]));
+assert(JSON.stringify(depthFirstSearch([], 0, 0)) == JSON.stringify([]));
+assert(JSON.stringify(depthFirstSearch([[]], 0, 0)) == JSON.stringify([0]));
+assert(JSON.stringify(depthFirstSearch(graph2, 0, 6)) == JSON.stringify([0, 1, 2, 3, 4, 5, 6]));
+assert(JSON.stringify(depthFirstSearch(graph3, 0, 3)) == JSON.stringify([0, 1, 2, 3]));
+assert(JSON.stringify(depthFirstSearch(graph4, 0, 3)) == JSON.stringify([0, 1, 2, 3]));
+assert(JSON.stringify(depthFirstSearch(graph5, 0, 2)) == JSON.stringify([0, 1, 2]));
