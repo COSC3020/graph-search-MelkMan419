@@ -1,3 +1,4 @@
+// I did not use help on this 
 function search(graph, startNode, targetNode, visitedNodes, path) {
       if (startNode === targetNode) {
           visitedNodes.push(startNode);
